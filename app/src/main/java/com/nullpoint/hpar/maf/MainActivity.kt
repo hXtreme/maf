@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val container: ViewGroup = findViewById(R.id.content_main)
         router = Conductor.attachRouter(this, container, savedInstanceState)
-        setRoot(HomeController(), R.id.nav_home)
+        router.setRoot(HomeController().withFadeTransaction().tag(R.id.nav_home.toString()))
 
         nav_view.setNavigationItemSelectedListener(this)
     }
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setSelectedDrawerItem(itemId: Int) {
         if (!isFinishing) {
             nav_view.setCheckedItem(itemId)
-            nav_view.menu.performIdentifierAction(itemId, 0)
+            //nav_view.menu.performIdentifierAction(itemId, 0)
         }
     }
 
@@ -87,14 +87,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         val id = item.itemId
 
-        val currentRoot = router.backstack.firstOrNull()
+        val currentController = router.backstack.lastOrNull()
 
-        if (currentRoot?.tag()?.toIntOrNull() == id) {
+        if (currentController?.tag()?.toIntOrNull() == id) {
             drawer_layout.closeDrawer(GravityCompat.START)
             return true
         }
         when (id) {
-            R.id.nav_home -> setRoot(HomeController(), id)
+            R.id.nav_home -> router.popToRoot()
             R.id.nav_rules -> navigateTo(RulesController(), id, true)
             R.id.nav_stats -> navigateTo(StatsController(), id, true)
             R.id.nav_share_stats -> navigateTo(ShareStatisticsController(), id, true)
@@ -102,10 +102,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    private fun setRoot(controller: Controller, id: Int) {
-        router.setRoot(controller.withFadeTransaction().tag(id.toString()))
     }
 
     private fun navigateTo(controller: Controller, id: Int, secondInStack: Boolean = false) {
