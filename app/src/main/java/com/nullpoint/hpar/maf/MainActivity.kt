@@ -36,15 +36,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val container: ViewGroup = findViewById(R.id.content_main)
         router = Conductor.attachRouter(this, container, savedInstanceState)
+        router.setRoot(HomeController().withFadeTransaction().tag(R.id.nav_home.toString()))
 
         nav_view.setNavigationItemSelectedListener(this)
     }
 
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
+            drawer_layout.closeDrawers()
+            return
+        }
+
+        val backstackSize = router.backstackSize
+        when {
+            backstackSize > 2 -> router.handleBack()
+
+            backstackSize == 2 -> {
+                setSelectedDrawerItem(R.id.nav_home)
+                router.handleBack()
+            }
+
+            else -> super.onBackPressed()
+        }
+    }
+
+    private fun setSelectedDrawerItem(itemId: Int) {
+        if (!isFinishing) {
+            nav_view.setCheckedItem(itemId)
+            //nav_view.menu.performIdentifierAction(itemId, 0)
         }
     }
 
@@ -68,24 +87,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         val id = item.itemId
 
-        val currentRoot = router.backstack.firstOrNull()
+        val currentController = router.backstack.lastOrNull()
 
-        if (currentRoot?.tag()?.toIntOrNull() == id) {
+        if (currentController?.tag()?.toIntOrNull() == id) {
             drawer_layout.closeDrawer(GravityCompat.START)
             return true
         }
         when (id) {
-            R.id.nav_home -> setRoot(HomeController(), id)
-            R.id.nav_rules -> setRoot(RulesController(), id)
-            R.id.nav_stats -> setRoot(StatsController(), id)
-            R.id.nav_share_stats -> setRoot(ShareStatisticsController(), id)
-            R.id.nav_settings -> setRoot(SettingsController(), id)
+            R.id.nav_home -> router.popToRoot()
+            R.id.nav_rules -> navigateTo(RulesController(), id, true)
+            R.id.nav_stats -> navigateTo(StatsController(), id, true)
+            R.id.nav_share_stats -> navigateTo(ShareStatisticsController(), id, true)
+            R.id.nav_settings -> navigateTo(SettingsController(), id, true)
         }
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    private fun setRoot(controller: Controller, id: Int) {
-        router.setRoot(controller.withFadeTransaction().tag(id.toString()))
+    private fun navigateTo(controller: Controller, id: Int, secondInStack: Boolean = false) {
+        if (secondInStack) {
+            router.popToRoot()
+        }
+        router.pushController(controller.withFadeTransaction().tag(id.toString()))
     }
 }
