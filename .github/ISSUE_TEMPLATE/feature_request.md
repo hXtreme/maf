@@ -1,6 +1,6 @@
 ---
 name: "🌟 Feature request"
-about: Suggest a feature to improve Tachiyomi
+about: Suggest a feature to improve Mafia
 title: "[Feature Request]"
 labels: "🌟 feature request"
 assignees: ''

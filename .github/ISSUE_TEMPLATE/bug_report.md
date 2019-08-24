@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 ### Device information
-* Tachiyomi version: ?
+* Mafia version: ?
 * Android version: ?
 
 ## Steps to reproduce
