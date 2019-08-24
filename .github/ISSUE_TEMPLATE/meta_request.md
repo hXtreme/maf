@@ -6,5 +6,7 @@ labels: "🧠 meta request"
 assignees: ''
 
 ---
-### Why/Organizational Benefit/Organizational Problem
+### Why/Project's Benefit/Existing Problem
 (explain why this should be added)
+
+### Other Details
