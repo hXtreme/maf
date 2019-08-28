@@ -16,7 +16,6 @@ import com.nullpoint.hpar.maf.ui.settings.SettingsController
 import com.nullpoint.hpar.maf.ui.share_stats.ShareStatisticsController
 import com.nullpoint.hpar.maf.ui.stats.StatsController
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -25,6 +24,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
