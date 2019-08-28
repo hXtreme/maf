@@ -13,4 +13,9 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <!--====-->
+    <!--Tabs-->
+    <!--====-->
+    <style name="AppTheme.Widget.Tabs" parent="AppTheme.AppBarOverlay" />
+
 </resources>
